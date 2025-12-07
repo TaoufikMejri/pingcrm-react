@@ -5,37 +5,18 @@
 
 import '~/styles/application.css';
 
-import { createApp, h } from 'vue';
+import { createInertiaApp } from '@inertiajs/react';
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
 
-import { router, createInertiaApp } from '@inertiajs/vue3';
-import { init, track } from '@plausible-analytics/tracker';
-const plausibleUrl = document.querySelector(
-  'meta[name="plausible-url"]',
-).content;
-if (plausibleUrl) {
-  init({
-    domain: document.querySelector('meta[name="app-host"]').content,
-    endpoint: `${plausibleUrl}/api/event`,
-    origin: globalThis.location.origin,
-    autoCapturePageviews: false,
-    outboundLinks: true,
-  });
-
-  router.on('navigate', () => {
-    track('pageview', {});
-  });
-}
-
-import * as Routes from '@/routes.js';
-
-const pages = import.meta.glob('../Pages/**/*.vue', { eager: true });
+const pages = import.meta.glob('../Pages/**/*.jsx', { eager: true });
 
 createInertiaApp({
   resolve: (name) => {
-    const component = pages[`../Pages/${name}.vue`];
+    const component = pages[`../Pages/${name}.jsx`];
     if (!component)
       throw new Error(
-        `Unknown page ${name}. Is it located under Pages with a .vue extension?`,
+        `Unknown page ${name}. Is it located under Pages with a .jsx extension?`,
       );
 
     return component;
@@ -43,11 +24,8 @@ createInertiaApp({
 
   title: (title) => (title ? `${title} - Ping CRM` : 'Ping CRM'),
 
-  setup({ el, App, props, plugin }) {
-    const vueApp = createApp({
-      render: () => h(App, props),
-    });
-    vueApp.config.globalProperties.$routes = Routes;
-    vueApp.use(plugin).mount(el);
+  setup({ el, App, props }) {
+    const root = createRoot(el);
+    root.render(createElement(App, props));
   },
 });
