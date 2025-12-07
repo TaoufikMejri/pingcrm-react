@@ -5,10 +5,13 @@
     "lint": "eslint --cache ."
   },
   "dependencies": {
+    "@inertiajs/react": "^2.2.19",
     "@inertiajs/vue3": "^2.2.19",
     "@plausible-analytics/tracker": "^0.4.4",
     "@popperjs/core": "^2.11.8",
     "lodash": "^4.17.21",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "timeago.js": "^4.0.2",
     "uuid": "^13.0.0",
     "vue": "^3.5.25"
